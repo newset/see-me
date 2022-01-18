@@ -42,9 +42,11 @@ const Result: React.FC<{}> = () => {
           return (
             <div key={index} className="result-item">
               <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ width: 100, fontWeight: "bold" }}>{row.type}</div>
-                <div style={{ flex: 1, textAlign: "center" }}>
+                <div style={{ width: 100, fontWeight: "bold" }} className="center">
+                  {row.type}
                   <div>{row.total}</div>
+                </div>
+                <div style={{ flex: 1, textAlign: "center" }}>
                   <div style={{}} className="sub-scores">
                     {row.data.map((item, index) => (
                       <span key={index} style={{}}>
@@ -60,7 +62,7 @@ const Result: React.FC<{}> = () => {
         <Space></Space>
     <Button block color="primary" onClick={()=>{
       navigate("/")
-    }}>修改</Button>
+    }}>重新测试</Button>
     <Space></Space>
     
     </div>

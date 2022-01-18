@@ -1,9 +1,10 @@
 import React from "react";
 import votes from "../data/votes";
 import { useNavigate } from "react-router-dom";
-import { Slider, Form, Button, Space } from "antd-mobile";
+import { Slider, Form, Dialog, Button, Space } from "antd-mobile";
 
 import { sum, cacheKey } from "../utils";
+import { clearImageViewer } from "antd-mobile/es/components/image-viewer/methods";
 const marks = {
   0: 0,
   1: 1,
@@ -37,11 +38,29 @@ const FormPage = () => {
 
   function onFinish() {
     localStorage.setItem(cacheKey, JSON.stringify(scores));
-    navigate("/result");
+    // 检查是否有未满足条件的条目
+    let target: HTMLDivElement;
+    let invalid = scores.some((row, index) => {
+      // @ts-ignore
+      target = document.getElementById(`vote-${index}`);
+      return  sum(row) >10;
+    });
+    if(invalid) {
+      Dialog.confirm({
+        content: '存在比重超出的内容，请先修正',
+        onConfirm:async () => {
+          //@ts-ignore
+          document.body.scrollIntoView(target);
+        }
+      })
+      return
+    }
+
+    // navigate("/result");
   }
 
   return (
-    <Form onFinish={onFinish}>
+    <Form onFinish={onFinish} initialValues={scores}>
       <div>
         <div
           className="div_title_cut_question"
@@ -73,8 +92,8 @@ const FormPage = () => {
                 >
                   {vote.title}
                 </h3>
-                <p style={{ fontSize: 14, color: "#aaa" }}>
-                    提示：总比重值必须为：10， ，已分配比重：
+                <p style={{ fontSize: 14, color: "#aaa", zIndex: 1+index,}} className="hint sticky padding">
+                    提示：总比重值必须为：10， 已分配比重：
                     <span style={
                       total > 10 ? {color: 'red'}: {}
                     }>{total}{total > 10 ? " 请修正": null}</span>
