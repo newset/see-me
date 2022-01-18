@@ -11,7 +11,7 @@
   },
   "scripts": {
     "vite": "vite",
-    "build": "vite build",
+    "build": "vite build --base=/see-me",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
