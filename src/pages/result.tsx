@@ -1,9 +1,7 @@
 import React from "react";
 import { types, factor, getIndex } from "../data/char";
 import { sum } from "../utils";
-const Result: React.FC<{}> = (props) => {
-  const [calced, setCalced] = React.useState([0, 0, 0, 0, 0, 0, 0, 0]);
-
+const Result: React.FC<{}> = () => {
   function getScore(index: number): number[] {
     const data = localStorage.getItem("score:vote");
     console.log("data");
