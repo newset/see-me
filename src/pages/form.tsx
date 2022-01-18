@@ -1,9 +1,9 @@
 import React from "react";
 import votes from "../data/votes";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Slider, Form, Button, Space } from "antd-mobile";
 
-import { sum } from "../utils";
+import { sum, cacheKey } from "../utils";
 const marks = {
   0: 0,
   1: 1,
@@ -18,21 +18,25 @@ const marks = {
   10: 10,
 };
 
+const defaultScores = [
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+];
+
+const cachedScore = localStorage.getItem(cacheKey);
+
 const FormPage = () => {
   let navigate = useNavigate();
 
-  const [scores, setScore] = React.useState<Array<Array<number>>>([
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-  ]);
+  const [scores, setScore] = React.useState<Array<Array<number>>>(cachedScore ? JSON.parse(cachedScore): defaultScores);
 
   function onFinish() {
-    localStorage.setItem("score:vote", JSON.stringify(scores));
+    localStorage.setItem(cacheKey, JSON.stringify(scores));
     navigate("/result");
   }
 
@@ -60,6 +64,7 @@ const FormPage = () => {
       <div style={{ padding: 10 }}>
         <div className="votes">
           {votes.map((vote, index) => {
+            const total = sum(scores[index])
             return (
               <div key={index}>
                 <h3
@@ -68,12 +73,18 @@ const FormPage = () => {
                 >
                   {vote.title}
                 </h3>
+                <p style={{ fontSize: 14, color: "#aaa" }}>
+                    提示：总比重值必须为：10， ，已分配比重：
+                    <span style={
+                      total > 10 ? {color: 'red'}: {}
+                    }>{total}{total > 10 ? " 请修正": null}</span>
+                  </p>
                 <div>
                   {vote.list.map((item, idx) => {
                     return (
                       <div key={idx}>
                         <p>{item}</p>
-                        <div>
+                        <div style={{padding: "0 20px"}}>
                           <Form.Item
                             noStyle={true}
                             name={`vote[${index}][${idx}]`}
@@ -84,6 +95,7 @@ const FormPage = () => {
                               max={10}
                               min={0}
                               ticks
+                              defaultValue={scores[index][idx]}
                               onChange={(value) => {
                                 const update = [...scores];
                                 update[index][idx] = +value;
@@ -91,7 +103,6 @@ const FormPage = () => {
                                 const total = sum(row);
                                 setScore(update);
                               }}
-                              value={scores[index][idx]}
                               marks={marks}
                             ></Slider>
                           </Form.Item>
@@ -99,10 +110,7 @@ const FormPage = () => {
                       </div>
                     );
                   })}
-                  <p style={{ fontSize: 14, color: "#aaa" }}>
-                    提示：总比重值必须为：10， ，已分配比重：
-                    <span>{sum(scores[index])}</span>
-                  </p>
+                
                 </div>
               </div>
             );

@@ -1,12 +1,15 @@
 import React from "react";
+import { Button, Space } from "antd-mobile";
 import { types, factor, getIndex } from "../data/char";
-import { sum } from "../utils";
+import { sum, cacheKey } from "../utils";
+import { useNavigate } from "react-router-dom";
 import "./result.less";
 
-const data = localStorage.getItem("score:vote");
-
 const Result: React.FC<{}> = () => {
+  const navigate = useNavigate();
   function getScore(name: string): number[] {
+    const data = localStorage.getItem(cacheKey);
+
     if (!data) {
       return [];
     }
@@ -16,7 +19,6 @@ const Result: React.FC<{}> = () => {
     const items = factor.map((row, vote) => {
       const key = row[index];
       const opt = getIndex(key);
-      console.log("key: ", opt, key);
       return values[vote][opt];
     });
     console.log("test: ", items, index);
@@ -33,7 +35,7 @@ const Result: React.FC<{}> = () => {
   });
 
   return (
-    <div style={{ padding: 10 }} className="page">
+    <div className="page">
       {scores
         .sort((a, b) => b.total - a.total)
         .map((row, index) => {
@@ -55,6 +57,12 @@ const Result: React.FC<{}> = () => {
             </div>
           );
         })}
+        <Space></Space>
+    <Button block color="primary" onClick={()=>{
+      navigate("/")
+    }}>修改</Button>
+    <Space></Space>
+    
     </div>
   );
 };
