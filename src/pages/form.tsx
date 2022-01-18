@@ -41,7 +41,7 @@ const FormPage = () => {
       <div>
         <div
           className="div_title_cut_question"
-          style={{ fontSize: 14, color: "#666" }}
+          style={{ fontSize: 14, color: "#666", padding: 20 }}
         >
           <p>
             说明：对下列问题的回答，可能在不同程度上描绘了你在题干所述情景下的行为。每题有八句话，请将总分10分分配给每题的八个句子。

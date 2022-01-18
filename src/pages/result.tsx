@@ -33,12 +33,12 @@ const Result: React.FC<{}> = () => {
   });
 
   return (
-    <div style={{ padding: 10 }}>
+    <div style={{ padding: 10 }} className="page">
       {scores
         .sort((a, b) => b.total - a.total)
         .map((row, index) => {
           return (
-            <div key={index} style={{ fontSize: 15, marginBottom: 20 }}>
+            <div key={index} className="result-item">
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div style={{ width: 100, fontWeight: "bold" }}>{row.type}</div>
                 <div style={{ flex: 1, textAlign: "center" }}>
