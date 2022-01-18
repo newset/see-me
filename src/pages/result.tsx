@@ -2,28 +2,29 @@ import React from "react";
 import { types, factor, getIndex } from "../data/char";
 import { sum } from "../utils";
 import "./result.less";
+
+const data = localStorage.getItem("score:vote");
+
 const Result: React.FC<{}> = () => {
-  function getScore(index: number): number[] {
-    const data = localStorage.getItem("score:vote");
-    console.log("data");
+  function getScore(name: string): number[] {
     if (!data) {
       return [];
     }
     const values = JSON.parse(data);
-    const indexes = Array(7)
-      .fill(1)
-      .map((_, i) => factor[i * 8 + index]);
-    const items = indexes.map((cur, index) => values[index][getIndex(cur)]);
+    const index = types.indexOf(name);
+
+    const items = factor.map((row, vote) => {
+      const key = row[index];
+      const opt = getIndex(key);
+      console.log("key: ", opt, key);
+      return values[vote][opt];
+    });
+    console.log("test: ", items, index);
     return items;
   }
 
-  function getTotal(name: string): number[] {
-    const index = types.indexOf(name);
-    return getScore(index);
-  }
-
   const scores = types.map((type) => {
-    const data = getTotal(type);
+    const data = getScore(type);
     return {
       data,
       type,
