@@ -1,6 +1,8 @@
 body,
 html {
   margin: 0;
+
+  --sticky-offset-top: 0;
 }
 .page {
   min-height: 100vh;
@@ -17,8 +19,8 @@ html {
 }
 
 .sticky {
-  position: -webkit-sticky;
   position: sticky;
+  position: -webkit-sticky;
   top: var(--sticky-offset-top);
   left: 0;
 }

@@ -56,7 +56,7 @@ const FormPage = () => {
       return
     }
 
-    // navigate("/result");
+    navigate("/result");
   }
 
   return (
@@ -85,7 +85,7 @@ const FormPage = () => {
           {votes.map((vote, index) => {
             const total = sum(scores[index])
             return (
-              <div key={index}>
+              <div key={index} style={{display: "unset"}}>
                 <h3
                   id={`vote-${index}`}
                   style={{ borderLeft: "4px solid #006eff", paddingLeft: 10 }}
