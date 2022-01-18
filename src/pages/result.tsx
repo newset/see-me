@@ -1,6 +1,7 @@
 import React from "react";
 import { types, factor, getIndex } from "../data/char";
 import { sum } from "../utils";
+import "./result.less";
 const Result: React.FC<{}> = () => {
   function getScore(index: number): number[] {
     const data = localStorage.getItem("score:vote");
@@ -16,31 +17,43 @@ const Result: React.FC<{}> = () => {
     return items;
   }
 
+  function getTotal(name: string): number[] {
+    const index = types.indexOf(name);
+    return getScore(index);
+  }
+
+  const scores = types.map((type) => {
+    const data = getTotal(type);
+    return {
+      data,
+      type,
+      total: sum(data),
+    };
+  });
+
   return (
     <div style={{ padding: 10 }}>
-      {types.map((type, index) => {
-        const s = getScore(index);
-        return (
-          <div key={index} style={{ fontSize: 15, marginBottom: 20 }}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div style={{ width: 100, fontWeight: "bold" }}>{type}</div>
-              <div style={{ flex: 1, textAlign: "center" }}>
-                <div>{sum(s)}</div>
-                <div>
-                  {s.map((item, index) => (
-                    <span
-                      key={index}
-                      style={{ padding: 10, display: "inline-block" }}
-                    >
-                      {item}
-                    </span>
-                  ))}
+      {scores
+        .sort((a, b) => b.total - a.total)
+        .map((row, index) => {
+          return (
+            <div key={index} style={{ fontSize: 15, marginBottom: 20 }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ width: 100, fontWeight: "bold" }}>{row.type}</div>
+                <div style={{ flex: 1, textAlign: "center" }}>
+                  <div>{row.total}</div>
+                  <div style={{}} className="sub-scores">
+                    {row.data.map((item, index) => (
+                      <span key={index} style={{}}>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 };
