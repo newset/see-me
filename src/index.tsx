@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Form from "./pages/form";
 import Result from "./pages/result";
 import { HashRouter, Routes, Route } from "react-router-dom";
+import "antd-mobile/es/global";
 
 function App() {
   return (
